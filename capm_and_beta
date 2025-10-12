@@ -1,0 +1,28 @@
+import yfinance as yf
+import pandas as pd
+import numpy as np
+
+# Fetch Close prices
+tcs = yf.download('TCS.NS', start='2024-01-01', end='2025-10-11', progress=False)['Close']
+nifty = yf.download('^NSEI', start='2024-01-01', end='2025-10-11', progress=False)['Close']
+
+# Daily returns
+tcs_returns = tcs.pct_change().dropna()
+nifty_returns = nifty.pct_change().dropna()
+
+# Align dates
+returns = pd.concat([tcs_returns, nifty_returns], axis=1).dropna()
+returns.columns = ['TCS', 'Nifty']
+
+# Beta = Cov(R_tcs, R_market) / Var(R_market)
+cov_matrix = np.cov(returns['TCS'], returns['Nifty'])
+beta = cov_matrix[0,1] / cov_matrix[1,1]
+
+# CAPM expected return
+Rf = 0.07 / 252  # daily risk-free
+Rm = returns['Nifty'].mean()
+expected_return = Rf + beta * (Rm - Rf)
+
+print("TCS Beta:", round(beta,4))
+print("Expected Daily Return (CAPM):", round(expected_return,5))
+print("Expected Annual Return:", round(expected_return*252,4))
