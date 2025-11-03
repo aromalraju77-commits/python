@@ -1,0 +1,21 @@
+import numpy as np
+import numpy_financial as npf
+import matplotlib.pyplot as plt
+
+# Cash flows: Initial investment + future inflows
+cash_flows = [-10000, 3000, 4000, 5000, 4000]
+
+# Discount rates (from 0% to 20%)
+rates = np.arange(0, 0.21, 0.01)
+
+# Calculate NPV for each rate
+npv_values = [npf.npv(r, cash_flows) for r in rates]
+
+# Plot the NPV curve
+plt.plot(rates * 100, npv_values, marker='o')
+plt.axhline(0, color='red', linestyle='--')  # Line where NPV = 0
+plt.title("NPV vs Discount Rate")
+plt.xlabel("Discount Rate (%)")
+plt.ylabel("NPV (₹)")
+plt.grid(True)
+plt.show()
