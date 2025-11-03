@@ -1,0 +1,17 @@
+import numpy as np
+import numpy_financial as npf
+import matplotlib.pyplot as plt
+
+rate = 0.10   # 10% discount rate
+fv = -1000    # future cash inflow
+years = np.arange(1, 11)  # from 1 to 10 years
+
+# Calculate PV for each year using numpy_financial
+pv = npf.pv(rate=rate, nper=years, pmt=0, fv=fv)
+
+plt.plot(years, pv, marker='o', color='blue')
+plt.title('Present Value vs Time (using numpy_financial)')
+plt.xlabel('Years')
+plt.ylabel('Present Value (₹)')
+plt.grid(True) # turns ON the grid
+plt.show() 
