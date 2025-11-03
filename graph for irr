@@ -1,0 +1,30 @@
+import numpy as np
+import numpy_financial as npf
+import matplotlib.pyplot as plt
+
+# Cash flows: Initial investment and returns
+cash_flows = [-10000, 3000, 4000, 5000, 4000]
+
+# Calculate IRR
+irr = npf.irr(cash_flows)
+
+# Create discount rates from 0% to 20%
+rates = np.arange(0, 0.21, 0.01)
+
+# Compute NPV for each discount rate
+npv_values = [npf.npv(r, cash_flows) for r in rates]
+
+# Plot the NPV curve
+plt.plot(rates * 100, npv_values, marker='o', label='NPV Curve')
+plt.axhline(0, color='gray', linestyle='--')
+
+# Mark the IRR point on the graph
+plt.scatter(irr * 100, 0, color='red', s=100, label=f'IRR = {irr*100:.2f}%')
+
+# Labels and title
+plt.title("NPV vs Discount Rate with IRR Point")
+plt.xlabel("Discount Rate (%)")
+plt.ylabel("NPV (₹)")
+plt.grid(True)
+plt.legend()
+plt.show()
